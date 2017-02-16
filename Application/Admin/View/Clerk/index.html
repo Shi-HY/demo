@@ -1,0 +1,148 @@
+<extend name="Base/common"/>
+<block name="body">
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 heading">
+                        <h1 class="page-header"><i class="im-table2"></i> <?= $store_name['store_name']?>CLERK LIST</h1>
+                        <!-- Start .option-buttons -->
+                        <div class="option-buttons option-buttons2">
+                            <div class="btn-toolbar" role="toolbar">
+                                <div class="btn-group">
+                                    <a href="{:U('Admin/Clerk/add', array('store_id'=>$store_id))}" class="btn tip" title="ADD CLERK">
+                                        <i class="im-plus s24"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End .option-buttons -->
+                    </div>
+                    <!-- End .page-header -->
+
+                </div>
+                <!-- End .row -->
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
+                            <div class="panel panel-default plain toggle panelClose panelRefresh">
+                                <!-- Start .panel -->
+                                <div class="panel-heading white-bg">
+                                    <h4 class="panel-title"></h4>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table display" id="datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>NAME</th>
+                                                <th>PASSWORD</th>
+                                                <th>SEX</th>
+                                                <th>STATE</th>
+                                                <th>ADD TIME</th>
+                                                <th>EDIT TIME</th>
+                                                <th>DELETE</th>
+                                                <th>EDIT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="data" id="vo">
+                                            <tr class="even gradeX">
+                                                <td>{$vo.uid}</td>
+                                                <td>{$vo.username}</td>
+                                                <td>***</td>
+                                                <td>
+                                                    <if condition="$vo.sex eq 1">
+                                                        MAN
+                                                    <else />
+                                                        WOMAN
+                                                    </if>
+                                                </td>
+                                                <td>
+                                                    <if condition="$vo.is_active eq 1">
+                                                        <a href="{:U('Admin/Clerk/lock', array('uid'=>$vo['uid'],'store_id'=>$store_id))}"><i class="ec-unlocked"></i></a>
+                                                        <else />
+                                                        <a href="{:U('Admin/Clerk/active', array('uid'=>$vo['uid'],'store_id'=>$store_id))}"><i class="ec-locked"></i></a>
+                                                    </if>
+                                                </td>
+                                                <td>{$vo.create_time}</td>
+                                                <td>{$vo.update_time}</td>
+                                                <td>
+                                                    <i class="br-trashcan clerkDel" id="{$vo.uid}" storeId="{$store_id}"></i>
+                                                </td>
+                                                <td><a href="{:U('Admin/Clerk/edit', array('uid'=>$vo['uid'],'store_id'=>$store_id))}"><i class="ec-pencil2"></i></a></td>
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- col-lg-12 end here -->
+                    </div>
+        
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+    <script>
+        /*删除提示*/
+        $('.clerkDel').click(function(e){
+            e.preventDefault();
+            //var that = $(this);
+            var id = $(this).attr('id');
+            var store_id = $(this).attr('storeId');
+            if(id == "" ) return false;
+            if(store_id == "" ) return false;
+            layer.msg('Do you want to delete?', {
+                time: 0
+                ,btn: ['DETERMINE', 'CANCEL']
+                ,yes: function(index){
+                    layer.close(index);
+                    if(del){
+                        del(id,store_id)
+                    }
+                }
+            });
+        });
+
+        function del(id,store_id){
+            if(id && store_id) {
+                var uid = id;
+                var store_id = store_id;
+            }else{
+                return false;
+            }
+            $.ajax({
+                url: "{:U('Admin/Clerk/del')}",
+                data: {uid: uid,store_id: store_id},
+                type: 'get',
+                success: function (data) {
+                    //console.log(data);
+                    if (data.status == 'd_success') {
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }else if(data.status == 'record'){
+                        layer.msg(data.title, {icon: 5});
+                        return false;
+                    }else{
+                        layer.msg(data.title, {icon: 5});
+                        return false;
+                    }
+                }
+
+            })
+        }
+    </script>
+</block>

@@ -1,0 +1,147 @@
+<extend name="Base/common"/>
+<block name="body">
+    <!-- Start #content -->
+    <div id="content">
+        <!-- Start .content-wrapper -->
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 heading">
+                    <h1 class="page-header"><i class="im-paragraph-justify"></i> ACTIVITY EDIT</h1>
+                </div>
+                <!-- End .page-header -->
+            </div>
+            <!-- End .row -->
+            <div class="outlet">
+                <!-- Start .outlet -->
+                <!-- Page start here ( usual with .row ) -->
+                <div class="row">
+                    <!-- Start .row -->
+                    <div class="col-lg-12">
+                        <!-- Start col-lg-12 -->
+                        <div class="panel panel-default toggle">
+                            <!-- Start .panel -->
+                            <div class="panel-heading">
+                                <h3 class="panel-title"></h3>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal group-border hover-stripped" role="form">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">ACTIVITY TITLE</label>
+                                        <div class="col-lg-4 col-md-4">
+                                            <input type="hidden" class="form-control" name="act_id" autofocus="autofocus" value="{$data.act_id}">
+                                            <input type="hidden" class="form-control" name="store_id" autofocus="autofocus" value="{$data.store_id}">
+                                            <input type="text" class="form-control" name="act_title" autofocus="autofocus" value="{$data.act_title}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">FRONT PAGE DISPLAYS</label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="is_display" value="1" <?php echo ($data['is_display'] == '1')?'checked':''?>> YES
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="is_display" value="0" <?php echo ($data['is_display'] == '0')?'checked':''?>> NO
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div id="editor-container" class="container" style="height:250px;">
+                                            <div id="editor-trigger"><p></p></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wizard-actions text-center" style=" margin-top: 10px">
+                                        <button class="btn" type="reset" id="cancel"><i class="en-arrow-left5"></i>RETURN</button>
+                                        <button class="btn btn-success" type="button" id="confirm">CONFIRM<i class="en-arrow-right5"></i>
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+
+                        <!-- End .panel -->
+                    </div>
+                    <!-- End col-lg-12 -->
+                </div>
+                <!-- End .row -->
+                <!-- Page End here -->
+            </div>
+            <!-- End .outlet -->
+        </div>
+        <!-- End .content-wrapper -->
+        <div class="clearfix"></div>
+    </div>
+    <!-- End #content -->
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/wangEditor-master/dist/css/wangEditor.min.css">
+    <style type="text/css">
+        #editor-trigger {
+            height: 250px;
+            /*max-height: 500px;*/
+        }
+    </style>
+    <script src="__PUBLIC__/Admin/wangEditor-master/dist/js/wangEditor.min.js"></script>
+    <script>
+        var editor = new wangEditor('editor-trigger');
+
+        // 上传图片
+        editor.config.uploadImgUrl = "{:U('Admin/Activity/add')}";
+        editor.config.uploadImgFileName = 'myFileName';
+        editor.config.menus = [
+            'source', '|', 'bold', 'underline', 'italic', 'strikethrough', 'eraser', 'forecolor', 'bgcolor', '|', 'quote',
+            'fontfamily', 'fontsize', 'head', 'unorderlist', 'orderlist', 'alignleft', 'aligncenter', 'alignright', '|',
+            'link','unlink', 'table', '|', 'img',
+            'insertcode', '|', 'undo', 'redo', 'fullscreen'
+        ];
+
+        editor.config.hideLinkImg = true;
+        editor.create();
+        var editor_html = '{$data.content|htmlspecialchars_decode}';
+        editor.$txt.html(editor_html);
+        $('#confirm').click(function(){
+            var act_id = $('input[name="act_id"]').val();
+            var store_id = $('input[name="store_id"]').val();
+            var is_display = $('input[name="is_display"]').val();
+            var act_title = $('input[name="act_title"]').val();
+            var editor_html = editor.$txt.html();
+
+            var banner_url = [];
+            editor_html.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, function (match, capture) {
+                banner_url.push(capture)
+            });
+
+            if(act_title == '') {
+                layer.msg('Active Title cannot be empty');
+                return false;
+            }
+            var data = {
+                act_id:act_id,
+                store_id:store_id,
+                act_title:act_title,
+                is_display:is_display,
+                editor_html:editor_html,
+                banner:banner_url[0]
+            };
+
+            $.ajax({
+                url: "{:U('Admin/Activity/edit')}",
+                data: data,
+                type: 'post',
+                success: function (data) {
+                   // console.log(data);
+                    if (data.status == 'u_err' ){
+                        layer.msg(data.title, {icon: 5});
+                    }else if (data.status == 'u_success' ){
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.href="{:U('Admin/Activity/index')}";
+                        }, 1000);
+                    }
+                }
+            });
+
+        });
+    </script>
+</block>

@@ -1,0 +1,96 @@
+<extend name="Base/common"/>
+<block name="body">
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 heading">
+                        <h1 class="page-header"><i class="im-table2"></i> STORE LIST</h1>
+                    </div>
+                </div>
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
+                            <div class="panel panel-default plain toggle panelClose panelRefresh">
+                                <!-- Start .panel -->
+                                <div class="panel-heading white-bg">
+                                    <h4 class="panel-title"></h4>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table display" id="datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>NAME</th>
+                                                <th>ADD TIME</th>
+                                                <th>EDIT TIME</th>
+                                                <th>VIEW CLERK</th>
+                                                <th>DELETE</th>
+                                                <th>EDIT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="data" id="vo">
+                                            <tr class="even gradeX">
+                                                <td>{$vo.store_id}</td>
+                                                <td>{$vo.store_name}</td>
+                                                <td>{$vo.create_time}</td>
+                                                <td>{$vo.update_time}</td>
+                                                <td><a href="{:U('Admin/Clerk/index', array('store_id'=>$vo['store_id']))}"><i class="im-profile"></i></a></td>
+                                                <td>
+                                                    <i class="br-trashcan del" id="{$vo.store_id}"></i>
+                                                </td>
+                                                <td><a href="{:U('Admin/Store/edit', array('store_id'=>$vo['store_id']))}"><i class="ec-pencil2"></i></a></td>
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- col-lg-12 end here -->
+                    </div>
+        
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+    <script>
+        function del(id){
+            if(id) {
+                var store_id = id;
+            }else{
+                return false;
+            }
+            $.ajax({
+                url: "{:U('Admin/Store/del')}",
+                data: {store_id: store_id},
+                type: 'get',
+                success: function (data) {
+                    if (data.status == 'd_success') {
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }else if(data.status == '0'){
+                        layer.msg(data.info, {icon: 5});
+                        return false;
+                    }else{
+                        layer.msg(data.title, {icon: 5});
+                        return false;
+                    }
+                }
+
+            })
+        }
+    </script>
+</block>

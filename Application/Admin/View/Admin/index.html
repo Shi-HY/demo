@@ -1,0 +1,118 @@
+<extend name="Base/common"/>
+<block name="body">
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 heading">
+                        <h1 class="page-header"><i class="im-table2"></i> ADMIN LIST</h1>
+                    </div>
+                </div>
+                <!-- End .row -->
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
+                            <div class="panel panel-default plain toggle panelClose panelRefresh">
+                                <!-- Start .panel -->
+                                <div class="panel-heading white-bg">
+                                    <h4 class="panel-title"></h4>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table display" id="datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>NAME</th>
+                                                <th>PASSWORD</th>
+                                                <th>POSITION</th>
+                                                <th>SEX</th>
+                                                <th>STATE</th>
+                                                <th>ADD TIME</th>
+                                                <th>EDIT TIME</th>
+                                                <th>DELETE</th>
+                                                <th>EDIT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="data" id="vo">
+                                            <tr class="even gradeX">
+                                                <td>{$vo.uid}</td>
+                                                <td>{$vo.username}</td>
+                                                <td>***</td>
+                                                <td>{$vo.role}</td>
+                                                <td>
+                                                    <if condition="$vo.sex eq 1">
+                                                        MAN
+                                                    <else />
+                                                        WOMAN
+                                                    </if>
+                                                </td>
+                                                <td>
+                                                    <if condition="$vo.is_active eq 1">
+                                                        <a href="{:U('Admin/Admin/lock', array('uid'=>$vo['uid']))}"><i class="ec-unlocked"></i></a>
+                                                        <else />
+                                                        <a href="{:U('Admin/Admin/active', array('uid'=>$vo['uid']))}"><i class="ec-locked"></i></a>
+                                                    </if>
+                                                </td>
+                                                <td>{$vo.create_time}</td>
+                                                <td>{$vo.update_time}</td>
+                                                <td>
+                                                    <i class="br-trashcan del" id="{$vo.uid}"></i>
+                                                </td>
+                                                <td><a href="{:U('Admin/Admin/edit', array('uid'=>$vo['uid']))}"><i class="ec-pencil2"></i></a></td>
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- col-lg-12 end here -->
+                    </div>
+        
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+    <script>
+        function del(id){
+            if(id) {
+                var uid = id
+            }else{
+                return false;
+            }
+            $.ajax({
+                url: "{:U('Admin/Admin/del')}",
+                data: {uid: uid},
+                type: 'get',
+                success: function (data) {
+                    if (data.status == 'd_success') {
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else if(data.status == 'd_this'){
+                        layer.msg(data.title);
+                        return false;
+                    }else if(data.status == '0'){
+                        layer.msg(data.info, {icon: 5});
+                        return false;
+                    }else{
+                        layer.msg(data.title, {icon: 5});
+                        return false;
+                    }
+                }
+
+            })
+        }
+    </script>
+</block>

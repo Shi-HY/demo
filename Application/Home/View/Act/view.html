@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>活动详情</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/common.css">
+
+    <script src="__PUBLIC__/Admin/assets/js/jquery-1.8.3.min.js"></script>
+    <style>
+        body{
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container mar_b50">
+    <div class="row" id="tab-search">
+        <div class="col-xs-12">
+            <if condition="$data eq null">
+                <p>暂无内容</p>
+            <else/>
+                <h2>{$data.act_title}</h2>
+                <span><?php echo date('Y-m-d H:i',$data['create_time']) ?></span>
+                <div>
+                    {$data.content|htmlspecialchars_decode}
+                </div>
+            </if>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="row">
+        <div class="col-xs-6 text-center" data-tab="search">
+            <a href="{:U('Home/BackNow/index')}">
+                <div class="footer_icon"><i class="ec-search"></i></div>
+                <div>护照查询</div>
+            </a>
+        </div>
+        <div class="col-xs-6 text-center" data-tab="list">
+            <a href="{:U('Home/Act/index')}">
+                <div class="footer_icon"><i class="ec-list"></i></div>
+                <div>活动列表</div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

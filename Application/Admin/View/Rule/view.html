@@ -1,0 +1,150 @@
+<extend name="Base/common"/>
+<block name="body">
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 heading">
+                         <h1 class="page-header"><i class="im-paragraph-justify"></i> JURISDICTION DETAILS</h1>
+                    </div>
+                </div>
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <!-- Start .row -->
+                        <div class="col-lg-12">
+                            <!-- Start col-lg-12 -->
+                            <div class="panel panel-default toggle">
+                                <!-- Start .panel -->
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal group-border hover-stripped" role="form">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">PATH</label>
+                                            <div class="col-lg-3 col-md-3 div-top">{$data.name}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">NAME</label>
+                                            <div class="col-lg-3 col-md-3 div-top">
+                                                {$data.title}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">SORT</label>
+                                            <div class="col-lg-3 col-md-3 div-top">
+                                                {$data.sort}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">LEVEL</label>
+                                            <div class="col-lg-3 col-md-3 div-top">
+                                                {$data.level}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">CLASSIFCATION</label>
+                                            <div class="col-lg-3 col-md-3 div-top">
+                                                {$p_name}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">CONTROLLER NAME</label>
+                                            <div class="col-lg-3 col-md-3 div-top">
+                                                {$data.p_c}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">ACTION NAME</label>
+                                            <div class="col-lg-3 col-md-3 div-top">
+                                                {$data.p_a}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">ADD TIME</label>
+                                            <div class="col-lg-3 col-md-3 div-top">{$data.create_time}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">EDIT TIME</label>
+                                            <div class="col-lg-3 col-md-3 div-top">
+                                                {$data.update_time}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">REMARKS</label>
+                                            <div class="col-lg-5 col-md-5 div-top">
+                                                {$data.remark}
+                                            </div>
+                                        </div>
+
+                                        <div class="wizard-actions" style="margin-left:217px;margin-top: 10px">
+                                            <button class="btn" type="reset" id="cancel"><i class="en-arrow-left5"></i>RETURN</button>
+                                            <a href="{:U('Admin/Rule/edit', array('id'=>$data['id']))}" class="btn btn-success">CONFIRM</a>
+                                            </button>
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- End col-lg-12 -->
+                    </div>
+                    <!-- End .row -->
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+
+    <script>
+        $('#confirm').click(function(){
+            var id = $('input[name="id"]').val();
+            var name = $('input[name="name"]').val();
+            var title = $('input[name="title"]').val();
+            var sort = $('input[name="sort"]').val();
+            var p_a = $('input[name="p_a"]').val();
+            var p_c = $('input[name="p_c"]').val();
+            var level = $('input[name="level"]').val();
+            var remark=document.getElementById("remark").value;
+            var status = $("input[name='status']:checked").val();
+            var pid=document.getElementById("pid").value;
+
+            $.ajax({
+                url: "<{:U('Admin/Rule/edit')}>",
+                data: {id: id,name: name,title: title,sort: sort,p_a: p_a,p_c: p_c,level: level,remark: remark,status: status,pid: pid},
+                type: 'post',
+                success: function (data) {
+                    if (data == 'u_err') {
+                        layer.msg(data.title, {icon: 5});
+                    }else {
+                        //console.log(data);
+                        layer.msg(data.title, {icon: 6});
+                        setTimeout(function () {
+                            location.href="<{:U('Admin/Rule/index')}>";
+                        }, 1000);
+                    }
+                }
+
+            })
+        });
+
+    </script>
+</block>

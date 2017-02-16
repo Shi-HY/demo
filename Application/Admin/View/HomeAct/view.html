@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <!-- Css files -->
+    <title>Cash Back System</title>
+    <!-- Icons -->
+    <link href="__PUBLIC__/Admin/assets/css/icons.css" rel="stylesheet" />
+    <!-- Bootstrap stylesheets (included template modifications) -->
+    <link href="__PUBLIC__/Admin/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="__PUBLIC__/Home/css/common.css" rel="stylesheet" >
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="__PUBLIC__/Admin/assets/img/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="__PUBLIC__/Admin/assets/img/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="__PUBLIC__/Admin/assets/img/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/Admin/assets/img/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="icon" href="__PUBLIC__/Admin/assets/img/ico/favicon.ico" type="image/png">
+
+    <style>
+        body{
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="admin_header">
+    <div class="container">
+        <div class="col-md-12">
+            <a href="{:U('Admin/Login/login')}" class="btn btn-success pull-right">Login</a>
+            <a href="{:U('Admin/HomeAct/index')}" class="btn btn btn-primary pull-right" style="margin-right: 15px">Acitity</a>
+        </div>
+    </div>
+</div>
+<div id="wrap">
+    <div id="main" class="clearfix">
+        <div class="container-fluid banner"></div>
+        <div class="container">
+            <div class="col-xs-12">
+                <if condition="$data eq null">
+                    <p class="text-center">暂无内容</p>
+                <else/>
+                    <h2 class="text-center">{$data.act_title}</h2>
+                    <p class="text-center"><?php echo date('Y-m-d H:i',$data['create_time']) ?></p>
+                    <div>
+                        {$data.content|htmlspecialchars_decode}
+                    </div>
+                </if>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="footer" class="text-center">
+    <p>沪ICP备17002849号 Copyright © www.shjppn.com,All right reserved</p>
+</div>
+</body>
+</html>

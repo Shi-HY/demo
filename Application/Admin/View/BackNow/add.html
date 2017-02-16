@@ -1,0 +1,118 @@
+<extend name="Base/common"/>
+<block name="body">
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 heading">
+                        <h1 class="page-header"><i class="im-paragraph-justify"></i> BACK NOW ADD</h1>
+                    </div>
+                </div>
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <!-- Start .row -->
+                        <div class="col-lg-12">
+                            <!-- Start col-lg-12 -->
+                            <div class="panel panel-default toggle">
+                                <!-- Start .panel -->
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal group-border hover-stripped" role="form">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">PASSPORT NO</label>
+                                            <div class="col-lg-4 col-md-4">
+                                                <input type="text" class="form-control" name="passport_no" autofocus="autofocus" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">CONSUMPTION AMOUNT</label>
+                                            <div class="col-lg-4 col-md-4">
+                                                <input type="text" class="form-control" name="price" autofocus="autofocus" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="wizard-actions" style="margin-left:217px;margin-top: 10px">
+                                            <button class="btn" type="reset" id="cancel"><i class="en-arrow-left5"></i>RETURN</button>
+                                            <button class="btn btn-success" type="button" id="confirm">CONFIRM<i class="en-arrow-right5"></i>
+                                            </button>
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- End col-lg-12 -->
+                    </div>
+                    <!-- End .row -->
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+
+    <script>
+        $('input[name="passport_no"]').blur(function(){
+            var passport_no = $('input[name="passport_no"]').val();
+            if(passport_no == '')
+            {
+                layer.msg('Passport number can not be empty');
+                return false;
+            }
+        });
+
+        $('input[name="price"]').blur(function(){
+            var price = $('input[name="price"]').val();
+            if(price == '')
+            {
+                layer.msg('Consumption amount cannot be empty');
+                return false;
+            }
+        });
+
+        $('#confirm').click(function(){
+            var passport_no = $('input[name="passport_no"]').val();
+            var price = $('input[name="price"]').val();
+
+            if(passport_no == '')
+            {
+                layer.msg('Passport number can not be empty');
+                return false;
+            }
+
+            if(price == '')
+            {
+                layer.msg('Consumption amount cannot be empty');
+                return false;
+            }
+
+            $.ajax({
+                url: "{:U('Admin/BackNow/add')}",
+                data: {passport_no: passport_no, price: price},
+                type: 'post',
+                success: function (data) {
+                    if (data.status == 'a_err' ){
+                        layer.msg(data.title, {icon: 5});
+                    }else if(data.status == 'only_clerk'){
+                        layer.msg(data.title, {icon: 5});
+                    }else if(data.status == 'a_success'){
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.href="{:U('Admin/BackNow/index')}";
+                        }, 1000);
+                    }
+                }
+
+            })
+        });
+    </script>
+</block>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cash Back System</title>
+    <!-- Mobile specific metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Force IE9 to render in normal mode -->
+    <!--[if IE]><meta http-equiv="x-ua-compatible" content="IE=9" /><![endif]-->
+    <meta name="author" content="SuggeElson" />
+    <meta name="description" content=""
+    />
+    <meta name="keywords" content=""
+    />
+    <meta name="application-name" content="sprFlat admin template" />
+    <!-- Windows8 touch icon ( http://www.buildmypinnedsite.com/ )-->
+    <meta name="msapplication-TileColor" content="#3399cc" />
+
+    <script>
+        var publicUrl = "__PUBLIC__";
+    </script>
+</head>
+<body>
+<!-- Start #header -->
+<div id="header">
+    <div class="container-fluid">
+        <div class="navbar">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="JavaScript:(0)">
+                   <!-- <i  ></i><span class="text-logo">Takashi</span><span class="text-slogan">maya</span>-->
+                </a>
+            </div>
+            <nav class="top-nav" role="navigation">
+                <ul class="nav navbar-nav pull-left">
+                    <li id="toggle-sidebar-li">
+                        <a href="#" id="toggle-sidebar"><i class="en-arrow-left2"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="full-screen"><i class="fa-fullscreen"></i></a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">
+                            <?php echo $_SESSION['Admin']['username']?></a>
+                        <ul class="dropdown-menu right" role="menu">
+                            <li><a href="{:U('Admin/Admin/center')}"><i class="st-user"></i> Personal information</a>
+                            </li>
+                            <li><a href="{:U('Admin/Login/logout')}"><i class="im-exit"></i> Sign out</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- End #header-area -->
+    </div>
+    <!-- Start .header-inner -->
+</div>
+<!-- End #header -->

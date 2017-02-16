@@ -1,0 +1,290 @@
+<extend name="Base/common"/>
+<block name="body">
+    <!-- Start #content -->
+    <div id="content">
+        <!-- Start .content-wrapper -->
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 heading">
+                    <h1 class="page-header"><i class="im-table2"></i> BACK NOW LIST</h1>
+                </div>
+            </div>
+            <!--添加返现-->
+            <div class="outlet">
+                <!-- Start .outlet -->
+                <!-- Page start here ( usual with .row ) -->
+                <div class="row">
+                    <!-- Start .row -->
+                    <div class="col-lg-12">
+                        <!-- Start col-lg-12 -->
+                        <div class="panel panel-default toggle">
+                            <!-- Start .panel -->
+                            <div class="panel-heading">
+                                <h3 class="panel-title"></h3>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal group-border hover-stripped" role="form">
+                                    <div class="form-group">
+                                        <label class="col-lg-4 col-md-4 col-sm-12 control-label">PASSPORT NO</label>
+                                        <div class="col-lg-4 col-md-4">
+                                            <input type="text" class="form-control" name="passport_no" autofocus="autofocus" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 col-md-4 col-sm-12 control-label">CONSUMPTION AMOUNT</label>
+                                        <div class="col-lg-4 col-md-4">
+                                            <input type="text" class="form-control" name="price" autofocus="autofocus" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group text-center">
+                                        <button class="btn btn-success" type="button" id="confirm">CONFIRM<i class="en-arrow-right5"></i>
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <!-- End .panel -->
+                    </div>
+                    <!-- End col-lg-12 -->
+                </div>
+                <!-- End .row -->
+                <!-- Page End here -->
+            </div>
+            <!-- End .outlet -->
+
+
+            <div class="outlet">
+                <!-- Start .outlet -->
+                <!-- Page start here ( usual with .row ) -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- col-lg-12 start here -->
+                        <div class="panel panel-default plain toggle panelClose panelRefresh">
+                            <!-- Start .panel -->
+                            <div class="panel-heading white-bg">
+                                <form action="{:U('Admin/BackNow/excel')}" method="post">
+                                    <input type="hidden" name="back_now_ids" value="">
+                                    <button class="btn btn-success" type="submit" id="excel">EXPORT REPORT</button>
+                                </form>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table display" id="datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>CHANNEL NAME</th>
+                                        <th>PASSPORT NO</th>
+                                        <th>CLERK</th>
+                                        <th>STORE</th>
+                                        <th>STATE</th>
+                                        <th>DELETE</th>
+                                        <th>OPERATION</th>
+                                        <th>INVALID</th>
+                                        <th>VIEW</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="data" id="vo">
+                                        <tr class="even gradeX">
+                                            <td class="back_id">{$vo.back_now_id}</td>
+                                            <td>{$vo.channel_name}</td>
+                                            <td>{$vo.passport_no}</td>
+                                            <td>{$vo.username}</td>
+                                            <td>{$vo.store_name}</td>
+                                            <td>
+                                                <if condition="$vo.status eq 0">
+                                                    Waiting for claim
+                                                    <elseif condition="$vo.status eq 1"/>
+                                                    Audit
+                                                    <elseif condition="$vo.status eq 2"/>
+                                                    Waiting to return
+                                                    <elseif condition="$vo.status eq 3"/>
+                                                    Return to present
+                                                    <elseif condition="$vo.status eq 4"/>
+                                                    Be overdue
+                                                    <elseif condition="$vo.status eq 5"/>
+                                                    Invalid
+                                                </if>
+                                            </td>
+                                            <td>
+                                                <i class="br-trashcan del" id="{$vo.back_now_id}"></i>
+                                            </td>
+                                            <td>
+                                                <if condition="$vo.status eq 0">
+                                                    Waiting for claim
+                                                    <elseif condition="$vo.status eq 1"/>
+                                                    <a href="{:U('Admin/BackNow/adopt', array('back_now_id'=>$vo['back_now_id']))}" class="btn btn-xs btn-primary">adopt</a>
+                                                    <elseif condition="$vo.status eq 2"/>
+                                                    <botton class="btn btn-xs btn-yellow" back_now_id="{$vo.back_now_id}" id="BackNowAct">Back now</botton>
+                                                    <elseif condition="$vo.status eq 3"/>
+                                                    /
+                                                    <elseif condition="$vo.status eq 4"/>
+                                                    /
+                                                    <elseif condition="$vo.status eq 5"/>
+                                                    /
+                                                </if>
+                                            </td>
+                                            <td>
+                                                <if  condition="$vo.status eq 3">
+                                                    /
+                                                    <elseif condition="$vo.status eq 4"/>
+                                                    /
+                                                    <elseif condition="$vo.status eq 5"/>
+                                                    /
+                                                    <else/>
+                                                    <a href="{:U('Admin/BackNow/invalid', array('back_now_id'=>$vo['back_now_id']))}"><i class="en-mute"></i></a>
+                                                </if>
+                                            </td>
+                                            <td>
+                                                <if  condition="$vo.status eq 0">
+                                                    /
+                                                    <elseif condition="$vo.status eq 4"/>
+                                                    /
+                                                    <elseif condition="$vo.status eq 5"/>
+                                                    /
+                                                    <else/>
+                                                    <a href="{:U('Admin/BackNow/view', array('back_now_id'=>$vo['back_now_id']))}" class="btn btn-xs btn-success">view</a>
+                                                </if>
+                                            </td>
+                                        </tr>
+                                    </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- End .panel -->
+                    </div>
+                    <!-- col-lg-12 end here -->
+                </div>
+
+                <!-- Page End here -->
+            </div>
+            <!-- End .outlet -->
+        </div>
+        <!-- End .content-wrapper -->
+    </div>
+    <!-- End #content -->
+    <script>
+        $('.timepicker').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            autoclose:true,
+            todayBtn:true
+        });
+
+        function del(id){
+            if(id) {
+                var back_now_id = id
+            }else{
+                return false;
+            }
+            $.ajax({
+                url: "{:U('Admin/BackNow/del')}",
+                data: {back_now_id: back_now_id},
+                type: 'get',
+                success: function (data) {
+                    // console.log(data);
+                    if (data.status == 'd_success') {
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }else if(data.status == '0'){
+                        layer.msg('No permission', {icon: 5});
+                        return false;
+                    }else{
+                        layer.msg(data.title, {icon: 5});
+                        return false;
+                    }
+                }
+
+            })
+        }
+
+        /**
+         * 添加返现操作
+         */
+        $('#confirm').click(function(){
+            var passport_no = $('input[name="passport_no"]').val();
+            var price = $('input[name="price"]').val();
+
+            if(passport_no == '')
+            {
+                layer.msg('Passport number can not be empty');
+                return false;
+            }
+
+            if(price == '')
+            {
+                layer.msg('Consumption amount cannot be empty');
+                return false;
+            }
+            $.ajax({
+                url: "{:U('Admin/BackNow/add')}",
+                data: {passport_no: passport_no, price: price},
+                type: 'post',
+                success: function (data) {
+                    //console.log(data)
+                    if (data.status == 'a_err' ){
+                        layer.msg(data.title, {icon: 5});
+                    }else if(data.status == '0'){       //没有权限
+                        layer.msg('No permission');
+                    }else if(data.status == 'only_clerk'){
+                        layer.msg(data.title, {icon: 5});
+                    }else if(data.status == 'a_success'){
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.href="{:U('Admin/BackNow/index')}";
+                        }, 1000);
+                    }
+                }
+
+            })
+        });
+
+        /**
+         * 返现操作
+         */
+        $('#BackNowAct').click(function(){
+            var that = $(this);
+            var back_now_id = $(this).attr('back_now_id');
+
+            $.ajax({
+                url: "{:U('Admin/BackNow/backNow')}",
+                data: {back_now_id:back_now_id},
+                type: 'post',
+                success: function (data) {
+                    if (data.status == 'bn_err' ){
+                        layer.msg(data.title, {icon: 5});
+                    }else if(data.status == 'bn_success'){
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.href="{:U('Admin/BackNow/index')}";
+                        }, 1000);
+                    }
+                }
+
+            })
+        });
+
+        /**
+         * 导出Excel
+         */
+
+        $('#excel').click(function(){
+            var back_now_ids = "";
+            var data = "";
+            $(".back_id").each(function(){
+                data += $(this).html()+',';
+            });
+
+            //去掉最后一个逗号
+            if (data.length > 0) {
+                back_now_ids = data.substr(0,data.length - 1);
+            }
+            $('input[name="back_now_ids"]').val(back_now_ids);
+        });
+    </script>
+</block>

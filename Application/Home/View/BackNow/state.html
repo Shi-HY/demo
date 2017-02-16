@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>返现状态</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/common.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="from_box clearfix">
+                <div class="from_box_tit clearfix">
+                    <h4>返现状态</h4>
+                </div>
+                <volist name="data" id="vo">
+                    <div class="col-xs-12">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                审核中
+                            </div>
+                            <div class="panel-body">
+                                <p>护照号: {$vo.passport_no}</p>
+                                <p class="mar_0">消费时间: {$vo.consume_time}</p>
+                            </div>
+                        </div>
+                    </div>
+                </volist>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="text-center mar_0">联系电话 : {$channel['channel_tel']} </p>
+            <p class="text-center mar_0">联系QQ : {$channel['channel_qq']}  </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

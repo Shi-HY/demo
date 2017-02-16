@@ -1,0 +1,75 @@
+<extend name="Base/common"/>
+<block name="body">
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 heading">
+                        <h1 class="page-header"><i class="im-table2"></i>ROLE LIST</h1>
+                    </div>
+                </div>
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
+                            <div class="panel panel-default plain toggle panelClose panelRefresh">
+                                <!-- Start .panel -->
+                                <div class="panel-heading white-bg">
+                                    <h4 class="panel-title"></h4>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table display" id="datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>NAME</th>
+                                                <th>STATE</th>
+                                                <th>ADD TIME</th>
+                                                <th>EDIT TIMR</th>
+                                                <th>ASSIGNMENT AUTHORITY</th>
+                                                <th>EDIT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <volist name="data" id="vo">
+                                            <tr class="even gradeX">
+                                                <td>{$vo.id}</td>
+                                                <td>{$vo.title}</td>
+                                                <td>
+                                                    <if condition="$vo.status eq 1">
+                                                        <a href="{:U('Admin/Role/lock', array('id'=>$vo['id']))}"><i class="ec-unlocked"></i></a>
+                                                        <else />
+                                                        <a href="{:U('Admin/Role/active', array('id'=>$vo['id']))}"><i class="ec-locked"></i></a>
+                                                    </if>
+                                                </td>
+                                                <td>{$vo.create_time}</td>
+                                                <td>{$vo.update_time}</td>
+                                                <td>
+                                                    <a href="{:U('Admin/Role/authorization', array('id'=>$vo['id']))}"><i class="en-forward"></i></a>
+                                                </td>
+                                                <td>
+                                                    <a href="{:U('Admin/Role/edit', array('id'=>$vo['id']))}"><i class="ec-pencil2"></i></a>
+                                                </td>
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- col-lg-12 end here -->
+                    </div>
+        
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+</block>

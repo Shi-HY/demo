@@ -1,0 +1,124 @@
+<extend name="Base/common"/>
+<block name="body">
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 heading">
+                        <h1 class="page-header"><i class="im-table2"></i>ASSIGNMENT AUTHORITY</h1>
+                    </div>
+                </div>
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
+                            <div class="panel panel-default plain toggle panelClose panelRefresh">
+                                <!-- Start .panel -->
+                                <div class="panel-heading white-bg">
+                                    <h4 class="panel-title"></h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <input type="hidden" name="role_id" value="{$role_id}">
+                                        <input type="hidden" name="myurls" value="{$myurls}" id="myurls">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                            <foreach name="data" item="vo" key="key">
+                                                <tr>
+                                                    <td style="width:20%" >
+                                                        <input type="checkbox" name="id" value="{$vo['id']}">{$vo['title']}
+                                                    </td>
+                                                    <td class="td">
+                                                        <foreach name="vo['two']" item="val" key="key1">
+                                                            <div>
+                                                                <input type="checkbox" name="id" value="{$val['id']}">{$val['title']}
+                                                            </div>
+                                                        </foreach>
+                                                    </td>
+                                                </tr>
+                                            </foreach>
+                                            </tbody>
+                                        </table>
+                                        <div class="wizard-actions" style="margin-left:217px;margin-top: 10px">
+                                            <button class="btn" type="reset" id="cancel"><i class="en-arrow-left5"></i>RETURN</button>
+
+                                            <button class="btn btn-success" type="button" id="confirm">CONFIR<i class="en-arrow-right5"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- col-lg-12 end here -->
+                    </div>
+        
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+
+
+    <script>
+        var myurls = $("#myurls").val();
+
+        var info_a = myurls.split(",");
+
+        var grade = $('input[name="id"]');
+
+        for(var i=0;i<grade.length;i++){
+            for(var j=0;j<info_a.length;j++){
+                if(grade.eq(i).val()==info_a[j]){
+                    grade.eq(i).prop("checked",true);
+                }
+            }
+        }
+
+        $('#confirm').click(function(){
+            var adIds = [];
+
+            $("input:checkbox[name=id]:checked").each(function(i){
+                if(0==i){
+                    adIds = $(this).val();
+                }else{
+                    adIds += (","+$(this).val());
+                }
+            });
+
+            if(adIds == '')
+            {
+                layer.msg('Please select permissions');
+                return false;
+            }
+
+            // alert(adIds);
+            // return false;
+
+            var role_id = $('input[name="role_id"]').val();
+
+            $.ajax({
+                url: "{:U('Admin/Role/authorization')}",
+                data: {role_id: role_id,Ids:adIds},
+                type: 'post',
+                success: function (data) {
+                    if (data == 'authorization_err') {
+                        layer.msg(data.title, {icon: 5});
+                    }else {
+                        layer.msg(data.title, {icon: 6});
+                        setTimeout(function () {
+                            location.href="{:U('Admin/Role/index')}";
+                        }, 1000);
+                    }
+                }
+
+            })
+        });
+
+    </script>
+</block>

@@ -1,0 +1,26 @@
+<script type="text/javascript">
+	  /*删除提示*/
+  $('.del').click(function(e){
+      e.preventDefault();
+      var that = $(this);
+      var id = $(this).attr('id');
+      if(id == "" ) return false;
+      layer.msg('Do you want to delete?', {
+          time: 0
+          ,btn: ['DETERMINE', 'CANCEL']
+          ,yes: function(index){
+              layer.close(index);
+              if(del){
+                  del(id)
+              }
+          }
+      });
+  });
+
+  $('#cancel').click(function(){
+      window.history.go(-1);
+  });
+</script>
+</body>
+
+</html>

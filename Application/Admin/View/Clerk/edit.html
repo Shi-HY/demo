@@ -1,0 +1,142 @@
+<extend name="Base/common"/>
+<block name="body">
+    <!-- Start #content -->
+    <div id="content">
+        <!-- Start .content-wrapper -->
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 heading">
+                    <h1 class="page-header"><i class="im-paragraph-justify"></i> CLERK EDIT</h1>
+                </div>            </div>
+            <!-- End .row -->
+            <div class="outlet">
+                <!-- Start .outlet -->
+                <!-- Page start here ( usual with .row ) -->
+                <div class="row">
+                    <!-- Start .row -->
+                    <div class="col-lg-12">
+                        <!-- Start col-lg-12 -->
+                        <div class="panel panel-default toggle">
+                            <!-- Start .panel -->
+                            <div class="panel-heading">
+                                <h3 class="panel-title"></h3>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal group-border hover-stripped" role="form">
+                                    <input type="hidden" name="store_id" value="{$store_id}"/>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">NAME</label>
+                                        <div class="col-lg-4 col-md-4">
+                                            <input type="text" class="form-control" name="username" autofocus="autofocus" value="{$data.username}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">PASSWORD</label>
+                                        <div class="col-lg-4 col-md-4">
+                                            <input type="password"  class="form-control" placeholder="Letters plus numbers 6-16 characters" name="password" value=""/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">SEX</label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="sex" value="1" <?php echo ($data['sex'] == '1')?'checked':''?>> MAN
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="sex" value="0" <?php echo ($data['sex'] == '0')?'checked':''?>> WOMAN
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-2 col-sm-12 control-label">STATE</label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="is_active"  value="1" <?php echo ($data['is_active'] == '1')?'checked':''?>> ENABLE
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="is_active"  value="0" <?php echo ($data['is_active'] == '0')?'checked':''?>> DISABLE
+                                        </label>
+                                    </div>
+
+                                    <div class="wizard-actions" style="margin-left:217px;margin-top: 10px">
+                                        <button class="btn" type="reset" id="cancel"><i class="en-arrow-left5"></i>RETURN</button>
+                                        <button class="btn btn-success" type="button" id="confirm">CONFIRM<i class="en-arrow-right5"></i>
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <!-- End .panel -->
+                    </div>
+                    <!-- End col-lg-12 -->
+                </div>
+                <!-- End .row -->
+                <!-- Page End here -->
+            </div>
+            <!-- End .outlet -->
+        </div>
+        <!-- End .content-wrapper -->
+        <div class="clearfix"></div>
+    </div>
+    <!-- End #content -->
+
+    <script>
+        $('input[name="username"]').blur(function(){
+            var username = $('input[name="username"]').val();
+            if(username == '')
+            {
+                layer.msg('Name cannot be empty');
+                return false;
+            }
+        });
+
+        $('input[name="password"]').blur(function(){
+            var passRep = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[#@!~%^&*])|(?=.*\d)(?=.*[#@!~%^&*]))[a-z\d#@!~%^&*]{6,16}/i;
+            if(!passRep.test($('input[name="password"]').val())) {
+                layer.msg('Letters and numbers 6-16 characters, please re-enter');
+                return false;
+            }
+        });
+
+        $('#confirm').click(function(){
+            var username = $('input[name="username"]').val();
+            var password = $('input[name="password"]').val();
+            var sex = $("input[name='sex']:checked").val();
+            var store_id = $('input[name="store_id"]').val();       //门店Id
+            var is_active = $("input[name='is_active']:checked").val();
+            var passRep = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[#@!~%^&*])|(?=.*\d)(?=.*[#@!~%^&*]))[a-z\d#@!~%^&*]{6,16}/i;
+            //var role_id=document.getElementById("role_id").value;       //职位
+
+            if(username == '')
+            {
+                layer.msg('Name cannot be empty');
+                return false;
+            }
+
+            if(!passRep.test(password)) {
+                layer.msg('Letters and numbers 6-16 characters, please re-enter');
+                return false;
+            }
+
+            $.ajax({
+                url: "{:U('Admin/Clerk/edit')}",
+                data: {username: username,store_id: store_id, password: password, sex: sex,is_active: is_active},
+                type: 'post',
+                success: function (data) {
+                    if (data.status == 'existence') {
+                        layer.msg(data.title);
+                    } else if(data.status == 'u_err' ){
+                        layer.msg(data.title, {icon: 5});
+                    }else {
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.href="{:U('Admin/Clerk/index',array('store_id'=>$store_id))}";
+                        }, 1000);
+                    }
+                }
+
+            })
+        });
+    </script>
+</block>

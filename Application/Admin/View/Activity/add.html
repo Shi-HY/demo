@@ -1,0 +1,153 @@
+<extend name="Base/common"/>
+<block name="body">
+        <!-- Start #content -->
+        <div id="content">
+            <!-- Start .content-wrapper -->
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 heading">
+                        <h1 class="page-header"><i class="im-paragraph-justify"></i> ACTIVITY ADD</h1>
+                    </div>
+                </div>
+                <div class="outlet">
+                    <!-- Start .outlet -->
+                    <!-- Page start here ( usual with .row ) -->
+                    <div class="row">
+                        <!-- Start .row -->
+                        <div class="col-lg-12">
+                            <!-- Start col-lg-12 -->
+                            <div class="panel panel-default toggle">
+                                <!-- Start .panel -->
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal group-border hover-stripped" role="form">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">ACTIVITY TITLE</label>
+                                            <div class="col-lg-4 col-md-4">
+                                                <input type="text" class="form-control" name="act_title" autofocus="autofocus" value="">
+                                            </div>
+                                        </div>
+                                        <!--<div class="form-group">-->
+                                            <!--<label class="col-lg-2 col-md-2 col-sm-12 control-label">首页Banner</label>-->
+                                            <!--<div class="col-lg-4 col-md-4">-->
+                                                <!--<input type="file" name="file" id="fileupload_input" class="form-control">-->
+                                                <!--<input type="hidden" class="fileupload_url">-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+                                        <div class="form-group">
+                                            <label class="col-lg-2 col-md-2 col-sm-12 control-label">FRONT PAGE DISPLAYS</label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="is_display"  value="1" checked> YES
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="is_display"  value="0"> NO
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div id="editor-container" class="container" style="height:250px;">
+                                                <div id="editor-trigger"><p></p></div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="wizard-actions text-center" style=" margin-top: 10px">
+                                            <button class="btn" type="reset" id="cancel"><i class="en-arrow-left5"></i>RETURN</button>
+                                            <button class="btn btn-success" type="button" id="confirm">CONFIRM<i class="en-arrow-right5"></i>
+                                            </button>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+
+                            <!-- End .panel -->
+                        </div>
+                        <!-- End col-lg-12 -->
+                    </div>
+                    <!-- End .row -->
+                    <!-- Page End here -->
+                </div>
+                <!-- End .outlet -->
+            </div>
+            <!-- End .content-wrapper -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- End #content -->
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/wangEditor-master/dist/css/wangEditor.min.css">
+    <style type="text/css">
+        #editor-trigger {
+            height: 250px;
+            /*max-height: 500px;*/
+        }
+        #fileupload_input{
+            display: none;
+        }
+    </style>
+    <script src="__PUBLIC__/Admin/wangEditor-master/dist/js/wangEditor.min.js"></script>
+    <script>
+    $(function () {
+        var editor = new wangEditor('editor-trigger');
+
+        // 上传图片
+        editor.config.uploadImgUrl = "{:U('Admin/Activity/add')}";
+        editor.config.uploadImgFileName = 'myFileName';
+        editor.config.menus = [
+            'source', '|', 'bold', 'underline', 'italic', 'strikethrough', 'eraser', 'forecolor', 'bgcolor', '|', 'quote',
+            'fontfamily', 'fontsize', 'head', 'unorderlist', 'orderlist', 'alignleft', 'aligncenter', 'alignright', '|',
+            'link','unlink', 'table', '|', 'img',
+            'insertcode', '|', 'undo', 'redo', 'fullscreen'
+        ];
+
+        editor.config.hideLinkImg = true;
+        editor.create();
+
+        $('#confirm').click(function(){
+            var act_title = $('input[name="act_title"]').val();
+            var is_display = $('input[name="is_display"]').val();
+            var editor_html = editor.$txt.html();
+
+            var banner_url = [];
+            editor_html.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, function (match, capture) {
+                banner_url.push(capture)
+            });
+
+            if(act_title == '') {
+                layer.msg('Active Title cannot be empty');
+                return false;
+            }
+
+            var data = {
+                act_title:act_title,
+                editor_html:editor_html,
+                is_display:is_display,
+                banner:banner_url[0]
+            };
+
+            $.ajax({
+                url: "{:U('Admin/Activity/add')}",
+                data: data,
+                type: 'post',
+                success: function (data) {
+                  //  console.log(data);
+                    if (data.status == 'a_err' ){
+                        layer.msg(data.title, {icon: 5});
+                    }else {
+                        layer.msg(data.title, {icon: 1});
+                        setTimeout(function () {
+                            location.href="{:U('Admin/Activity/index')}";
+                        }, 1000);
+                    }
+                }
+
+            })
+        });
+
+    })
+    </script>
+</block>
